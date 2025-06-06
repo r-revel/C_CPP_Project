@@ -1,4 +1,4 @@
-Вот сокращённая инструкция для Linux:
+Ссылка на git https://github.com/r-revel/C_CPP_Project/tree/master/Job_2/Task_1
 
 ### 1. Структура проекта
 ```
