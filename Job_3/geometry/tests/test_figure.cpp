@@ -90,7 +90,6 @@ TEST(FigureTest, Rotation) {
     Point points[] = {{1, 0}, {0, 1}};
     Figure f(2, points);
     
-    // Rotate 90 degrees counter-clockwise around origin
     f.rotate(Point(0, 0), 90);
     
     EXPECT_NEAR(f[0].getX(), 0.0, 1e-9);
@@ -111,7 +110,7 @@ TEST(FigureTest, IOStreamOperators) {
     
     std::ostringstream oss;
     oss << f1;
-    EXPECT_TRUE(oss.str().find("Figure with 2 vertices") != std::string::npos);
+    EXPECT_TRUE(oss.str().find("Фигура с 2 вершинами") != std::string::npos);
     
     std::istringstream iss("2 1 2 3 4");
     Figure f2;
@@ -121,4 +120,4 @@ TEST(FigureTest, IOStreamOperators) {
     EXPECT_DOUBLE_EQ(f2[1].getX(), 3.0);
 }
 
-} // namespace geometry
+}

@@ -4,7 +4,7 @@
 
 namespace geometry {
 
-constexpr size_t INITIAL_CAPACITY = 4;
+constexpr size_t INITIAL_CAPACITY = 4;  // Начальная емкость массива вершин
 
 Figure::Figure() : vertices_(new Point[INITIAL_CAPACITY]), capacity_(INITIAL_CAPACITY), vertexCount_(0) {}
 
@@ -80,7 +80,6 @@ void Figure::resize(size_t newCapacity) {
     capacity_ = newCapacity;
 }
 
-
 void Figure::addVertex(const Point& vertex) {
     if (vertexCount_ == capacity_) {
         resize(capacity_ * 2);
@@ -90,14 +89,14 @@ void Figure::addVertex(const Point& vertex) {
 
 Point& Figure::operator[](size_t index) {
     if (index >= vertexCount_) {
-        throw std::out_of_range("Vertex index out of range");
+        throw std::out_of_range("Индекс вершины вне допустимого диапазона");
     }
     return vertices_[index];
 }
 
 const Point& Figure::operator[](size_t index) const {
     if (index >= vertexCount_) {
-        throw std::out_of_range("Vertex index out of range");
+        throw std::out_of_range("Индекс вершины вне допустимого диапазона");
     }
     return vertices_[index];
 }
@@ -109,29 +108,29 @@ Figure& Figure::operator+=(const Point& vertex) {
 
 void Figure::rotate(const Point& center, int angleDegrees) {
     if (angleDegrees % 90 != 0) {
-        throw std::invalid_argument("Angle must be multiple of 90 degrees");
+        throw std::invalid_argument("Угол должен быть кратным 90 градусам");
     }
     
-    // Normalize angle to 0-360 range
+    // Нормализация угла в диапазон 0-360 градусов
     angleDegrees = angleDegrees % 360;
     if (angleDegrees < 0) angleDegrees += 360;
     
-    // Number of 90 degree rotations
+    // Количество поворотов на 90 градусов
     const int rotations = angleDegrees / 90;
     
     for (size_t i = 0; i < vertexCount_; ++i) {
-        // Translate to origin
+        // Перенос в начало координат
         Point translated = vertices_[i] - center;
         
-        // Apply rotations
+        // Применение поворотов
         for (int r = 0; r < rotations; ++r) {
-            // Rotate 90 degrees counter-clockwise
+            // Поворот на 90 градусов против часовой стрелки
             double newX = -translated.getY();
             double newY = translated.getX();
             translated = Point(newX, newY);
         }
         
-        // Translate back
+        // Обратный перенос
         vertices_[i] = translated + center;
     }
 }
@@ -141,7 +140,7 @@ std::istream& operator>>(std::istream& is, Figure& figure) {
     is >> count;
     
     if (count == 0) {
-        throw std::invalid_argument("Vertex count cannot be zero");
+        throw std::invalid_argument("Количество вершин не может быть нулевым");
     }
     
     figure = Figure();
@@ -156,7 +155,7 @@ std::istream& operator>>(std::istream& is, Figure& figure) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Figure& figure) {
-    os << "Figure with " << figure.vertexCount_ << " vertices: ";
+    os << "Фигура с " << figure.vertexCount_ << " вершинами: ";
     for (size_t i = 0; i < figure.vertexCount_; ++i) {
         os << figure.vertices_[i];
         if (i < figure.vertexCount_ - 1) {
