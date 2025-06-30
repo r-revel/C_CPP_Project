@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.16)
+project (account_repository)
+
+set(CMAKE_CXX_STANDARD 23)
+
+add_subdirectory(abstract_account_repository)
+add_subdirectory(in_memory_account_repository)
+add_subdirectory(thread_safe_account_repository)

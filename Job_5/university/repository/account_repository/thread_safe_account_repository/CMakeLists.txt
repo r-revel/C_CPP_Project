@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.16)
+project(thread_safe_account_repository)
+
+set(CMAKE_CXX_STANDARD 23)
+
+add_library(thread_safe_account_repository STATIC source/thread_safe_account_repository.cpp)
+
+target_include_directories(thread_safe_account_repository PUBLIC include)
+
+target_link_libraries(thread_safe_account_repository PUBLIC account_repository)

@@ -1,0 +1,14 @@
+{
+	"controller" : 
+	{
+		"type" : "text_ui"
+	},
+	"repository" : 
+	{
+		"type" : "in_memory"
+	},
+	"view" : 
+	{
+		"type" : "text_ui"
+	}
+}

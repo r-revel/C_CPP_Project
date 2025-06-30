@@ -1,0 +1,15 @@
+{
+	"controller" : 
+	{
+		"type" : "cli"
+	},
+	"repository" : 
+	{
+		"type" : "json",
+		"path" : "data.json"
+	},
+	"view" : 
+	{
+		"type" : "cli"
+	}
+}

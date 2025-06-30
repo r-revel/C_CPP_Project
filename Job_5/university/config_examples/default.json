@@ -1,0 +1,14 @@
+{
+	"controller" : 
+	{
+		"type" : "cli"
+	},
+	"repository" : 
+	{
+		"type" : "in_memory"
+	},
+	"view" : 
+	{
+		"type" : "cli"
+	}
+}
