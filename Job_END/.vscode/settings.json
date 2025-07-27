@@ -1,0 +1,11 @@
+{
+  "files.associations": {
+    "*.csv": "reporting-cz.omegasheets-vscode",
+    "*.htm": "php",
+    "*.pug": "jade",
+    "iomanip": "cpp",
+    "thread": "cpp",
+    "iostream": "cpp",
+    "algorithm": "cpp"
+  }
+}
