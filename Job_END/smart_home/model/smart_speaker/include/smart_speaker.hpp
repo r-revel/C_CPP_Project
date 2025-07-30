@@ -3,9 +3,11 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
+#include <iostream>
 
 #include "room.hpp"
 #include "device.hpp"
+#include "isensor_device.hpp"
 
 namespace smart_home {
 
@@ -19,7 +21,8 @@ public:
     void addDevice(std::shared_ptr<IDevice> device);
     void removeDevice(const std::string& deviceId);
     std::vector<std::shared_ptr<IDevice>> getDevices() const;
-
+    // Обход включенных устройств и их опрос
+    void checkAndRepairDevices();
 private:
     std::string name_;
     Room room_;

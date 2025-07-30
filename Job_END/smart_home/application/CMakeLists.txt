@@ -29,6 +29,7 @@ target_link_libraries(
     smart_home
     device_controller
     smart_home_controller
+    smart_home_cli
     ${CMAKE_THREAD_LIBS_INIT}
     ${CURSES_LIBRARIES}
 )

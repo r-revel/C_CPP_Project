@@ -25,4 +25,20 @@ std::vector<std::shared_ptr<IDevice>> SmartSpeaker::getDevices() const {
     return devices_;
 }
 
+void SmartSpeaker::checkAndRepairDevices() {
+    std::cout << "Проверка устройств в колонке '" << name_ << "':\n";
+    
+    for (const auto& device : devices_) {
+        if (!device->isOnline()) {
+            std::cout << "⚠ Устройство " << device->getName() << " (ID: " << device->getId() 
+                      << ") отключено. Попытка восстановить...\n";    
+        }
+        
+        if (auto sensorDev = std::dynamic_pointer_cast<ISensorDevice>(device)) {
+            std::cout << "Датчик " << device->getName() << ": " 
+                      << sensorDev->readValue() << "\n";
+        }
+    }
+}
+
 } // namespace smart_home

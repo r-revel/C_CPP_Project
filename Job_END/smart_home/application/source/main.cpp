@@ -13,6 +13,7 @@
 #include "smart_home.hpp"
 #include "device_controller.hpp"
 #include "smart_home_controller.hpp"
+#include "smart_home_cli.hpp"
 
 
 namespace smart_home {
@@ -91,33 +92,62 @@ void run_demo_application() {
 
 int main() {
 
-    // Создаем комнаты
+    smart_home::SmartHome home;
+    smart_home::CliView view;
+    smart_home::SmartHomeCLI cli(home, view);
+
+    // Добавляем тестовые данные
     smart_home::Room kitchen("Кухня", 1, smart_home::RoomType::KITCHEN);
     smart_home::Room livingRoom("Гостиная", 2, smart_home::RoomType::LIVING_ROOM);
 
-    // Создаем устройства
     auto bulb = std::make_shared<smart_home::SmartBulb>("bulb1", "Умная лампа");
     auto thermo = std::make_shared<smart_home::Thermometer>("thermo1", "Датчик температуры");
 
-    // Создаем колонки и добавляем устройства
     smart_home::SmartSpeaker kitchenSpeaker("Кухонная колонка", kitchen);
     kitchenSpeaker.addDevice(bulb);
     kitchenSpeaker.addDevice(thermo);
 
-    // Управляем умным домом
-    smart_home::SmartHome home;
-    smart_home::SmartHomeController::addSpeaker(home, kitchenSpeaker);
+    home.addSpeaker(kitchenSpeaker);
 
-    // Находим колонку и управляем устройствами
-    smart_home::SmartSpeaker* speaker = smart_home::SmartHomeController::findSpeaker(home, "Кухонная колонка");
-    if (speaker) {
-        smart_home::SmartHomeController::listAllDevices(*speaker);
-        smart_home::SmartHomeController::controlDeviceInSpeaker(*speaker, "bulb1"); // Включаем лампу
-        smart_home::SmartHomeController::controlDeviceInSpeaker(*speaker, "thermo1"); // Читаем датчик
+    // Пример использования новых методов:
+    std::cout << home; // Вывод списка колонок
+    
+    try {
+        auto& speaker = home["Кухонная колонка"]; // Доступ по имени
+        speaker.checkAndRepairDevices(); // Проверка устройств
+    } catch (const std::out_of_range& e) {
+        std::cerr << "Ошибка: " << e.what() << "\n";
     }
 
-    // Проверяем статус устройства
-    std::cout << smart_home::DeviceController::getDeviceStatus(bulb) << "\n";
+    cli.run();
+
+    // Создаем комнаты
+    // smart_home::Room kitchen("Кухня", 1, smart_home::RoomType::KITCHEN);
+    // smart_home::Room livingRoom("Гостиная", 2, smart_home::RoomType::LIVING_ROOM);
+
+    // // Создаем устройства
+    // auto bulb = std::make_shared<smart_home::SmartBulb>("bulb1", "Умная лампа");
+    // auto thermo = std::make_shared<smart_home::Thermometer>("thermo1", "Датчик температуры");
+
+    // // Создаем колонки и добавляем устройства
+    // smart_home::SmartSpeaker kitchenSpeaker("Кухонная колонка", kitchen);
+    // kitchenSpeaker.addDevice(bulb);
+    // kitchenSpeaker.addDevice(thermo);
+
+    // // Управляем умным домом
+    // smart_home::SmartHome home;
+    // smart_home::SmartHomeController::addSpeaker(home, kitchenSpeaker);
+
+    // // Находим колонку и управляем устройствами
+    // smart_home::SmartSpeaker* speaker = smart_home::SmartHomeController::findSpeaker(home, "Кухонная колонка");
+    // if (speaker) {
+    //     smart_home::SmartHomeController::listAllDevices(*speaker);
+    //     smart_home::SmartHomeController::controlDeviceInSpeaker(*speaker, "bulb1"); // Включаем лампу
+    //     smart_home::SmartHomeController::controlDeviceInSpeaker(*speaker, "thermo1"); // Читаем датчик
+    // }
+
+    // // Проверяем статус устройства
+    // std::cout << smart_home::DeviceController::getDeviceStatus(bulb) << "\n";
 
     // // Создаем устройства умного дома с указанием их ID и названия
     // smart_home::SmartBulb bulb("bulb1", "Гостиная лампа");

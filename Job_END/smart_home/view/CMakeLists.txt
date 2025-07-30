@@ -4,3 +4,4 @@ project(view)
 set(CMAKE_CXX_STANDARD 23)
 
 add_subdirectory(cli_view)
+add_subdirectory(smart_home_cli)
