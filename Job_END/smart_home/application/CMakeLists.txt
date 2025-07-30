@@ -24,6 +24,11 @@ target_link_libraries(
     smart_kettle
     leak_sensor
     air_conditioner
+    room
+    smart_speaker
+    smart_home
+    device_controller
+    smart_home_controller
     ${CMAKE_THREAD_LIBS_INIT}
     ${CURSES_LIBRARIES}
 )

@@ -11,8 +11,6 @@ find_package(Curses REQUIRED)
 
 # Добавление поддиректорий
 add_subdirectory(model)
-# add_subdirectory(repossitory)
-# add_subdirectory(service)
-# add_subdirectory(controller)
+add_subdirectory(controller)
 add_subdirectory(view)
 add_subdirectory(application)

@@ -1,24 +1,31 @@
 #pragma once
-#include "../smart_speaker/include/smart_speaker.hpp"
+
 #include <map>
 #include <vector>
 #include <memory>
 #include <ostream>
 
+#include <smart_speaker.hpp>
+
 namespace smart_home {
 
 class SmartHome {
 public:
-    void addSpeaker(std::shared_ptr<SmartSpeaker> speaker);
-    std::shared_ptr<SmartSpeaker> getSpeaker(const std::string& roomName);
-    const std::map<std::string, std::shared_ptr<SmartSpeaker>>& getAllSpeakers() const;
+    void addSpeaker(const SmartSpeaker& speaker);
+    void removeSpeaker(const std::string& speakerName);
     
-    friend std::ostream& operator<<(std::ostream& os, const SmartHome& smartHome);
-    std::shared_ptr<SmartSpeaker> operator[](const std::string& roomName);
-    const std::shared_ptr<SmartSpeaker> operator[](const std::string& roomName) const;
+    SmartSpeaker* findSpeaker(const std::string& name);
+    std::vector<SmartSpeaker> getSpeakers() const;
+
+    // Перегрузка оператора << для вывода списка колонок
+    friend std::ostream& operator<<(std::ostream& os, const SmartHome& home);
+    
+    // Перегрузка оператора [] для доступа к колонке по имени
+    SmartSpeaker& operator[](const std::string& name);
+    const SmartSpeaker& operator[](const std::string& name) const;
 
 private:
-    std::map<std::string, std::shared_ptr<SmartSpeaker>> speakers_;
+    std::vector<SmartSpeaker> speakers_;
 };
 
 } // namespace smart_home

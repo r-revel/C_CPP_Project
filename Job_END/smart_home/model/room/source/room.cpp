@@ -1,4 +1,8 @@
-#include "air_conditioner.hpp"
+#include <sstream>
+#include "room.hpp"
+
+
+namespace smart_home {
 
 Room::Room(const std::string& name, int number, RoomType type) 
     : name_(name), number_(number), type_(type) {}
@@ -17,3 +21,5 @@ std::string Room::getTypeAsString() const {
         default:                    return "Неизвестно";
     }
 }
+
+} // namespace smart_home

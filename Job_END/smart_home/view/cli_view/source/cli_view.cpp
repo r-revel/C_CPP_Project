@@ -28,12 +28,12 @@ void CliView::clear_main() {
 void CliView::show_menu() {
     clear_main();
     
-    std::cout << "\n\tMAIN MENU\n\n";
-    std::cout << "1. List all smart speakers\n";
-    std::cout << "2. Show room devices\n";
-    std::cout << "3. Control device\n";
-    std::cout << "4. Check status\n";
-    std::cout << "5. Exit\n\n";
+    std::cout << "\n\tГЛАВНОЕ МЕНЮ\n\n";
+    std::cout << "1. Список всех колонок\n";
+    std::cout << "2. Устройства в комнате\n";
+    std::cout << "3. Управление устройством\n";
+    std::cout << "4. Статус системы\n";
+    std::cout << "5. Выход\n\n";
 }
 
 int CliView::get_menu_choice() {
@@ -63,8 +63,8 @@ void CliView::show_speakers_list(const std::vector<std::pair<std::string, std::s
         return;
     }
     
-    std::cout << "\n\tSMART SPEAKERS LIST\n\n";
-    std::cout << std::left << std::setw(30) << "Room" << "Type\n";
+    std::cout << "\n\tСПИСОК КОЛОНОК\n\n";
+    std::cout << std::left << std::setw(30) << "Комната" << "Тип\n";
     std::cout << std::string(50, '-') << "\n";
     
     for (const auto& [room, type] : speakers) {
@@ -81,10 +81,10 @@ void CliView::show_devices_list(const std::vector<std::tuple<std::string, std::s
         return;
     }
     
-    std::cout << "\n\tDEVICES LIST\n\n";
+    std::cout << "\n\tСПИСОК УСТРОЙСТВ\n\n";
     std::cout << std::left << std::setw(15) << "ID" 
-              << std::setw(20) << "Name" 
-              << std::setw(15) << "Status" 
+              << std::setw(20) << "Имя" 
+              << std::setw(15) << "Статус" 
               << "Type\n";
     std::cout << std::string(60, '-') << "\n";
     

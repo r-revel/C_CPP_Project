@@ -1,25 +1,29 @@
 #pragma once
-#include "../room/include/room.hpp"
-#include "../device/include/device.hpp"
+
 #include <vector>
 #include <memory>
 #include <algorithm>
+
+#include "room.hpp"
+#include "device.hpp"
 
 namespace smart_home {
 
 class SmartSpeaker {
 public:
-    SmartSpeaker(std::shared_ptr<Room> room);
+    SmartSpeaker(const std::string& name, const Room& room);
     
-    std::shared_ptr<Room> getRoom() const;
-    const std::vector<std::shared_ptr<Device>>& getDevices() const;
+    std::string getName() const;
+    Room getRoom() const;
     
-    void addDevice(std::shared_ptr<Device> device);
-    void checkAndUpdateDevices();
-    
+    void addDevice(std::shared_ptr<IDevice> device);
+    void removeDevice(const std::string& deviceId);
+    std::vector<std::shared_ptr<IDevice>> getDevices() const;
+
 private:
-    std::shared_ptr<Room> room_;
-    std::vector<std::shared_ptr<Device>> devices_;
+    std::string name_;
+    Room room_;
+    std::vector<std::shared_ptr<IDevice>> devices_;
 };
 
 } // namespace smart_home
