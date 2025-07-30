@@ -3,11 +3,16 @@
 Проект разделен на две основные части: **Model** (модели данных) и **Controller** (логика управления).  
 
 #### **1. Model**  
+
+Реализация абстрактного классы (интерфейсы) и композицию:
+
+- **`IDevice `** – базовый интерфейс для всех устройств (ID, имя, статус онлайн/оффлайн).  
+- **`IActiveDevice`** – интерфейс для устройств с управлением (вкл/выкл). (например, лампочка, пылесос).  
+- **`ISensorDevice`** – интерфейс для устройств с датчиками (например, термометр).  
+
 Содержит классы, описывающие структуру умного дома:  
 
-- **`Device`** – базовый класс для всех устройств (ID, имя, статус онлайн/оффлайн).  
-- **`ActiveDevice`** – наследник `Device`, добавляет методы активации/деактивации (например, лампочка, пылесос).  
-- **`SensorDevice`** – наследник `Device`, добавляет методы для получения показаний (например, термометр).  
+- **`Device`** – базовая реализация IDevice  
 - **`Room`** – описывает комнату (имя, номер, тип: кухня, коридор и т.д.).  
 - **`SmartSpeaker`** – умная колонка, содержит информацию о комнате (`Room`) и список подключенных устройств (`Device`).  
 - **`SmartHome`** – управляет колонками (`SmartSpeaker`), поддерживает сортировку по имени и поиск.  
@@ -33,8 +38,8 @@
 
 ```mermaid
 classDiagram
-    class Device {
-        <<abstract>>
+    class IDevice {
+        <<interface>>
         +string id
         +string name
         +bool isOnline
@@ -42,44 +47,47 @@ classDiagram
         +setStatus(bool) void
     }
 
-    class ActiveDevice {
+    class IActiveDevice {
+        <<interface>>
         +bool isActive
         +activate() void
         +deactivate() void
     }
 
-    class SensorDevice {
+    class ISensorDevice {
+        <<interface>>
         +float value
         +readValue() float
     }
 
-    class Room {
+    class Device {
+        +string id
         +string name
-        +int number
-        +string type
+        +bool isOnline
+        +getStatus() bool
+        +setStatus(bool) void
     }
 
     class SmartSpeaker {
         +Room room
-        +vector<Device*> devices
-        +addDevice(Device*) void
+        +vector<IDevice*> devices
+        +addDevice(IDevice*) void
         +removeDevice(string id) void
-        +listDevices() vector<Device*>
     }
 
     class SmartHome {
         +vector<SmartSpeaker> speakers
         +addSpeaker(SmartSpeaker) void
         +removeSpeaker(string name) void
-        +operator[](string name) SmartSpeaker&
-        +operator<<(ostream&, SmartHome&) ostream&
     }
 
-    Device <|-- ActiveDevice
-    Device <|-- SensorDevice
-    SmartSpeaker "1" *-- "1" Room
-    SmartSpeaker "1" *-- "0..*" Device
-    SmartHome "1" *-- "0..*" SmartSpeaker
+    IDevice <|.. Device
+    IDevice <|.. IActiveDevice
+    IDevice <|.. ISensorDevice
+    Device *-- IActiveDevice : Optional
+    Device *-- ISensorDevice : Optional
+    SmartSpeaker *-- IDevice
+    SmartHome *-- SmartSpeaker
 ```
 
 #### **2. Controller (UML-диаграмма классов)**  

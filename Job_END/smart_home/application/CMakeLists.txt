@@ -19,6 +19,11 @@ target_link_libraries(
     smart_home_app
     PUBLIC
     cli_view
+    thermometer
+    smart_bulb
+    smart_kettle
+    leak_sensor
+    air_conditioner
     ${CMAKE_THREAD_LIBS_INIT}
     ${CURSES_LIBRARIES}
 )

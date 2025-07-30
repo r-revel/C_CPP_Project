@@ -10,8 +10,8 @@ find_package(PkgConfig REQUIRED)
 find_package(Curses REQUIRED)
 
 # Добавление поддиректорий
-# add_subdirectory(model)
-# add_subdirectory(repository)
+add_subdirectory(model)
+# add_subdirectory(repossitory)
 # add_subdirectory(service)
 # add_subdirectory(controller)
 add_subdirectory(view)

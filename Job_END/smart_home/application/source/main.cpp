@@ -1,4 +1,9 @@
 #include "cli_view.hpp"
+#include "smart_bulb.hpp"
+#include "thermometer.hpp"
+#include "smart_kettle.hpp"
+#include "leak_sensor.hpp"
+#include "air_conditioner.hpp"
 #include <cstdlib>
 #include <vector>
 #include <utility>
@@ -78,6 +83,32 @@ void run_demo_application() {
 } // namespace smart_home
 
 int main() {
-    smart_home::run_demo_application();
+    // Создаем устройства умного дома с указанием их ID и названия
+    smart_home::SmartBulb bulb("bulb1", "Гостиная лампа");
+    smart_home::Thermometer thermo("thermo1", "Датчик температуры");
+    smart_home::SmartKettle kettle("kettle1", "Чайник Xiaomi");
+    smart_home::LeakSensor leakSensor("leak1", "Датчик протечки");
+    smart_home::AirConditioner ac("ac1", "Кондиционер");
+
+
+    // Управление устройствами
+    bulb.activate();
+    kettle.activate();
+    kettle.setTemperature(95.5f);
+    leakSensor.setLeakStatus(true);
+    ac.activate();
+    ac.setTargetTemperature(20.0f);
+    
+    // Выводим текущее состояние всех устройств
+    std::cout << "Лампа " << (bulb.isActive() ? "включена" : "выключена") << "\n";
+    std::cout << "Температура: " << thermo.readValue() << "°C\n";
+    std::cout << "Чайник " << (kettle.isActive() ? "кипятит" : "выключен") 
+              << ", температура: " << kettle.readValue() << "°C\n";
+    std::cout << "Протечка: " << (leakSensor.readValue() > 0.5f ? "Обнаружена!" : "Нет") << "\n";
+    std::cout << "Кондиционер: " << (ac.isActive() ? "Работает" : "Выключен")
+              << ", текущая температура: " << ac.readValue() << "°C\n";
+    
+    
+    // smart_home::run_demo_application();
     return EXIT_SUCCESS;
 }

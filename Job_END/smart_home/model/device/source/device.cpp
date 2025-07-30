@@ -22,47 +22,39 @@ void Device::validateName(const std::string& name) const {
 }
 
 // Конструктор
-Device::Device(std::string id, std::string name, DeviceStatus status)
-    : id_(std::move(id)), name_(std::move(name)), status_(status) {
+Device::Device(std::string id, std::string name)
+    : id_(std::move(id)), name_(std::move(name)) {
     validateId(id_);
     validateName(name_);
 }
 
 // Геттеры
-const std::string& Device::getId() const noexcept {
+std::string Device::getId() const {
     return id_;
 }
 
-const std::string& Device::getName() const noexcept {
+std::string Device::getName() const {
     return name_;
+}
+
+bool Device::isOnline() const {
+    return status_ == DeviceStatus::ONLINE;
 }
 
 DeviceStatus Device::getStatus() const noexcept {
     return status_;
 }
 
-void Device::setStatus(DeviceStatus status) noexcept {
+void Device::setStatus(DeviceStatus status) {
     status_ = status;
-}
-
-// Методы по умолчанию
-std::string Device::getType() const {
-    if (isActive() && isSensor()) {
-        return "Hybrid";
-    } else if (isActive()) {
-        return "Active";
-    } else if (isSensor()) {
-        return "Sensor";
-    }
-    return "Unknown";
 }
 
 std::string Device::toString() const {
     std::ostringstream oss;
     oss << "Device [ID: " << id_
         << ", Name: " << name_
-        << ", Status: " << (status_ == DeviceStatus::ONLINE ? "Online" : "Offline")
-        << ", Type: " << getType() << "]";
+        << ", Status: " << (isOnline() ? "Online" : "Offline") << "]";
+        // << ", Type: " << getType() << "]";
     return oss.str();
 }
 

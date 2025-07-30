@@ -4,22 +4,21 @@
 namespace smart_home {
 
 enum class RoomType {
-    LIVING,
-    BEDROOM,
-    KITCHEN,
-    BATHROOM,
-    HALLWAY,
-    BALCONY
+    LIVING_ROOM,  // Жилая комната
+    KITCHEN,      // Кухня
+    BATHROOM,     // Санузел
+    HALLWAY,      // Коридор
+    BALCONY       // Балкон
 };
 
 class Room {
 public:
-    Room(std::string name, int number, RoomType type);
+    Room(const std::string& name, int number, RoomType type);
     
     std::string getName() const;
     int getNumber() const;
     RoomType getType() const;
-    std::string getTypeString() const;
+    std::string getTypeAsString() const;
 
 private:
     std::string name_;
