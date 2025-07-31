@@ -17,6 +17,8 @@ public:
     
     // Проверка состояния устройства
     static std::string getDeviceStatus(std::shared_ptr<IDevice> device);
+
+    static void setDeviceOnlineStatus(std::shared_ptr<IDevice> device, bool online);
 };
 
 } // namespace device

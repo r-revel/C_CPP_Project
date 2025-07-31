@@ -30,4 +30,20 @@ std::string DeviceController::getDeviceStatus(std::shared_ptr<IDevice> device) {
     return status;
 }
 
+void DeviceController::setDeviceOnlineStatus(std::shared_ptr<IDevice> device, bool online) {
+    if (!device) {
+        throw std::invalid_argument("Устройство не может быть nullptr");
+    }
+    DeviceStatus newStatus = online ? DeviceStatus::ONLINE : DeviceStatus::OFFLINE;
+    if (device->getStatus() == newStatus) {
+        return;
+    }
+    device->setStatus(newStatus);
+    if (newStatus == DeviceStatus::OFFLINE) {
+        if (auto activeDev = std::dynamic_pointer_cast<IActiveDevice>(device)) {
+            activeDev->deactivate();
+        }
+    }
+}
+
 } // namespace device

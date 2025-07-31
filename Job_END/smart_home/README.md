@@ -40,45 +40,57 @@
 classDiagram
     class IDevice {
         <<interface>>
-        +string id
-        +string name
-        +bool isOnline
-        +getStatus() bool
-        +setStatus(bool) void
+        +getId() string
+        +getName() string
+        +isOnline() bool
+        +getStatus() DeviceStatus
+        +setStatus(DeviceStatus) void
     }
 
     class IActiveDevice {
         <<interface>>
-        +bool isActive
+        +isActive() bool
         +activate() void
         +deactivate() void
     }
 
     class ISensorDevice {
         <<interface>>
-        +float value
         +readValue() float
     }
 
     class Device {
-        +string id
-        +string name
-        +bool isOnline
-        +getStatus() bool
-        +setStatus(bool) void
+        <<IDevice>>
+        +Device(string id, string name)
+        +getId() string
+        +getName() string
+        +setStatus(DeviceStatus)
+        +getStatus() DeviceStatus
+        +isOnline() bool
+        +toString() string
     }
 
     class SmartSpeaker {
         +Room room
         +vector<IDevice*> devices
-        +addDevice(IDevice*) void
-        +removeDevice(string id) void
+
+        +getName() string
+        +getRoom() Room
+        +addDevice(shared_ptr~IDevice~ device) void
+        +removeDevice(string deviceId) void
+        +getDevices() vector~shared_ptr~IDevice~~
+        +checkAndRepairDevices() void
+        +addNewDevice~T, Args...~(Args... args) void
     }
 
     class SmartHome {
-        +vector<SmartSpeaker> speakers
+        +vector~SmartSpeaker~ speakers_
         +addSpeaker(SmartSpeaker) void
         +removeSpeaker(string name) void
+        +findSpeaker(string name) SmartSpeaker*
+        +getSpeakers() vector~SmartSpeaker~
+        +operator[](string name) SmartSpeaker&
+        +operator<<(ostream& os) ostream&
     }
 
     IDevice <|.. Device
@@ -95,16 +107,18 @@ classDiagram
 ```mermaid
 classDiagram
     class DeviceController {
-        +toggleDevice(ActiveDevice*) void
-        +readSensor(SensorDevice*) float
-        +checkDeviceStatus(Device*) bool
+        +toggleDevice(shared_ptr~IActiveDevice~) static void
+        +readSensorValue(shared_ptr~ISensorDevice~) static float
+        +getDeviceStatus(shared_ptr~IDevice~) static string
+        +setDeviceOnlineStatus(shared_ptr~IDevice~, bool) static void
     }
 
     class SmartHomeController {
-        +addSpeaker(SmartHome&, SmartSpeaker) void
-        +removeSpeaker(SmartHome&, string name) void
-        +findSpeaker(SmartHome&, string name) SmartSpeaker*
-        +controlSpeakerDevices(SmartSpeaker&) void
+        +addSpeaker(SmartHome&, SmartSpeaker&) static void
+        +removeSpeaker(SmartHome&, string) static void
+        +findSpeaker(SmartHome&, string) SmartSpeaker* static
+        +listAllDevices(SmartSpeaker&) static void
+        +controlDeviceInSpeaker(SmartSpeaker&, string) static void
     }
 
     DeviceController --> ActiveDevice

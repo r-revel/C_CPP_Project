@@ -16,6 +16,7 @@ public:
     virtual std::string getName() const = 0;
     virtual bool isOnline() const = 0;
     virtual void setStatus(DeviceStatus online) = 0;
+    virtual DeviceStatus getStatus() const = 0;
 };
 
 } // namespace device

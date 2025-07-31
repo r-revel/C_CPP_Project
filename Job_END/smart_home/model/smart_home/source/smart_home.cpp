@@ -22,10 +22,7 @@ void SmartHome::removeSpeaker(const std::string& speakerName) {
 }
 
 SmartSpeaker* SmartHome::findSpeaker(const std::string& name) {
-    auto it = std::find_if(speakers_.begin(), speakers_.end(),
-        [&name](const SmartSpeaker& s) { return s.getName() == name; }
-    );
-    return (it != speakers_.end()) ? &(*it) : nullptr;
+    return &((*this)[name]);
 }
 
 std::vector<SmartSpeaker> SmartHome::getSpeakers() const {
@@ -36,12 +33,19 @@ std::vector<SmartSpeaker> SmartHome::getSpeakers() const {
 // TODO Данной функции здесь не место и все лучше вынести в cli классы
 // Вывод списка колонок
 std::ostream& operator<<(std::ostream& os, const SmartHome& home) {
+    // Создаем копию списка колонок для сортировки
+    auto speakers = home.speakers_;
+    std::sort(speakers.begin(), speakers.end(), 
+        [](const SmartSpeaker& a, const SmartSpeaker& b) {
+            return a.getName() < b.getName();
+        });
+
     // Заголовок
     os << "\n=== СПИСОК КОЛОНОК ===\n";
     os << "Имя колонки\t\tКомната\t\tТип\n";
         
     // Данные
-    for (const auto& speaker : home.speakers_) {
+    for (const auto& speaker : speakers) {
         os << speaker.getName() << "\t\t"
         << speaker.getRoom().getName() << "\t\t"
         << speaker.getRoom().getTypeAsString() << "\n";

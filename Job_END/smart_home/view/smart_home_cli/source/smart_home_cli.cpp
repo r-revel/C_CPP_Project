@@ -140,7 +140,7 @@ void SmartHomeCLI::checkSystemStatus() {
         "Подключенных устройств: " + std::to_string(totalDevices)
     );
 }
-void SmartHomeCLI::addNewDevice() {
+void с {
     view_.clear_main();
     
     // 1. Выбор колонки
