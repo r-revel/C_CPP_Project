@@ -7,4 +7,4 @@ add_library(smart_speaker STATIC source/smart_speaker.cpp)
 
 target_include_directories(smart_speaker PUBLIC include)
 
-target_link_libraries(smart_speaker PUBLIC device room isensor_device)
+target_link_libraries(smart_speaker PUBLIC device room isensor_device iactive_device)

@@ -32,14 +32,21 @@ std::vector<SmartSpeaker> SmartHome::getSpeakers() const {
     return speakers_;
 }
 
+// TODO Добавил лишь из за правила в техническом задании. 
+// TODO Данной функции здесь не место и все лучше вынести в cli классы
 // Вывод списка колонок
 std::ostream& operator<<(std::ostream& os, const SmartHome& home) {
-    os << "Список колонок (всего: " << home.speakers_.size() << "):\n";
+    // Заголовок
+    os << "\n=== СПИСОК КОЛОНОК ===\n";
+    os << "Имя колонки\t\tКомната\t\tТип\n";
+        
+    // Данные
     for (const auto& speaker : home.speakers_) {
-        os << "- " << speaker.getName() 
-           << " (Комната: " << speaker.getRoom().getName() 
-           << ", Тип: " << speaker.getRoom().getTypeAsString() << ")\n";
+        os << speaker.getName() << "\t\t"
+        << speaker.getRoom().getName() << "\t\t"
+        << speaker.getRoom().getTypeAsString() << "\n";
     }
+    
     return os;
 }
 

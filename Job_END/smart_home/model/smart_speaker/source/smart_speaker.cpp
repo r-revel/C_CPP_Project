@@ -24,7 +24,8 @@ void SmartSpeaker::removeDevice(const std::string& deviceId) {
 std::vector<std::shared_ptr<IDevice>> SmartSpeaker::getDevices() const {
     return devices_;
 }
-
+// TODO Добавил лишь из за правила в техническом задании. 
+// TODO Данной функции здесь не место и все лучше вынести в cli классы
 void SmartSpeaker::checkAndRepairDevices() {
     std::cout << "Проверка устройств в колонке '" << name_ << "':\n";
     
@@ -32,6 +33,11 @@ void SmartSpeaker::checkAndRepairDevices() {
         if (!device->isOnline()) {
             std::cout << "⚠ Устройство " << device->getName() << " (ID: " << device->getId() 
                       << ") отключено. Попытка восстановить...\n";    
+            device->setStatus(DeviceStatus::ONLINE); // Включаем обратно
+            
+            if (auto activeDev = std::dynamic_pointer_cast<IActiveDevice>(device)) {
+                activeDev->activate(); // Если устройство активное, включаем
+            }
         }
         
         if (auto sensorDev = std::dynamic_pointer_cast<ISensorDevice>(device)) {
@@ -40,5 +46,4 @@ void SmartSpeaker::checkAndRepairDevices() {
         }
     }
 }
-
 } // namespace smart_home

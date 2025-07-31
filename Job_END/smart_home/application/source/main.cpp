@@ -18,109 +18,39 @@
 
 namespace smart_home {
 
-// Тестовые данные для демонстрации
-std::vector<std::pair<std::string, std::string>> get_test_speakers() {
-    return {
-        {"123Living Room", "Living"},
-        {"Kitchen", "Kitchen"},
-        {"Bedroom", "Bedroom"},
-        {"Bathroom", "Bathroom"}
-    };
-}
-
-std::vector<std::tuple<std::string, std::string, std::string, std::string>> get_test_devices() {
-    return {
-        {"light1", "Main Light", "Online", "Active"},
-        {"thermo1", "Thermostat", "Online", "Sensor"},
-        {"plug1", "Smart Plug", "Offline", "Active"},
-        {"humid1", "Humidifier", "Online", "Hybrid"}
-    };
-}
 
 void run_demo_application() {
+    SmartHome home;
     CliView view;
-    view.init();
-    
-    bool running = true;
-    while (running) {
-        view.show_menu();
-        int choice = view.get_menu_choice();
-        
-        switch (choice) {
-            case 1: // List speakers
-                view.show_speakers_list(get_test_speakers());
-                view.get_input("123Press Enter to continue..."); // Ждем нажатия Enter
-                break;
-                
-            case 2: // Show devices
-                view.show_devices_list(get_test_devices());
-                view.get_input("Press Enter to continue...");
-                break;
-                
-            case 3: // Control device
-                {
-                    std::string device_id = view.get_input("Enter device ID: ");
-                    if (!device_id.empty()) {
-                        view.show_message("Controlling device: " + device_id);
-                        bool confirm = view.get_confirmation("Turn device on?");
-                        view.show_message(confirm ? "Device turned ON" : "Device left OFF");
-                    }
-                }
-                break;
-                
-            case 4: // Check status
-                view.show_message("System status: OK\nConnected devices: 4");
-                break;
-                
-            case 5: // Exit
-                if (view.get_confirmation("Are you sure you want to exit?")) {
-                    running = false;
-                }
-                break;
-                
-            default:
-                view.show_error("Invalid choice! Please try again.");
-                break;
-        }
-    }
-    
-    view.show_message("Goodbye! Shutting down...");
-    view.cleanup();
-}
-
-} // namespace smart_home
-
-int main() {
-
-    smart_home::SmartHome home;
-    smart_home::CliView view;
-    smart_home::SmartHomeCLI cli(home, view);
+    SmartHomeCLI cli(home, view);
 
     // Добавляем тестовые данные
-    smart_home::Room kitchen("Кухня", 1, smart_home::RoomType::KITCHEN);
-    smart_home::Room livingRoom("Гостиная", 2, smart_home::RoomType::LIVING_ROOM);
+    Room kitchen("Кухня", 1, RoomType::KITCHEN);
+    Room livingRoom("Гостиная", 2, RoomType::LIVING_ROOM);
 
-    auto bulb = std::make_shared<smart_home::SmartBulb>("bulb1", "Умная лампа");
-    auto thermo = std::make_shared<smart_home::Thermometer>("thermo1", "Датчик температуры");
+    auto bulb = std::make_shared<SmartBulb>("bulb1", "Умная лампа");
+    auto thermo = std::make_shared<Thermometer>("thermo1", "Датчик температуры");
 
-    smart_home::SmartSpeaker kitchenSpeaker("Кухонная колонка", kitchen);
+    SmartSpeaker kitchenSpeaker("kitchen1", kitchen);
     kitchenSpeaker.addDevice(bulb);
     kitchenSpeaker.addDevice(thermo);
 
     home.addSpeaker(kitchenSpeaker);
-
-    // Пример использования новых методов:
-    std::cout << home; // Вывод списка колонок
     
     try {
-        auto& speaker = home["Кухонная колонка"]; // Доступ по имени
+        auto& speaker = home["kitchen1"]; // Доступ по имени
         speaker.checkAndRepairDevices(); // Проверка устройств
     } catch (const std::out_of_range& e) {
         std::cerr << "Ошибка: " << e.what() << "\n";
     }
 
     cli.run();
+}
 
+} // namespace smart_home
+
+int main() {
+    smart_home::run_demo_application();
     // Создаем комнаты
     // smart_home::Room kitchen("Кухня", 1, smart_home::RoomType::KITCHEN);
     // smart_home::Room livingRoom("Гостиная", 2, smart_home::RoomType::LIVING_ROOM);
@@ -150,11 +80,11 @@ int main() {
     // std::cout << smart_home::DeviceController::getDeviceStatus(bulb) << "\n";
 
     // // Создаем устройства умного дома с указанием их ID и названия
-    // smart_home::SmartBulb bulb("bulb1", "Гостиная лампа");
-    // smart_home::Thermometer thermo("thermo1", "Датчик температуры");
-    // smart_home::SmartKettle kettle("kettle1", "Чайник Xiaomi");
-    // smart_home::LeakSensor leakSensor("leak1", "Датчик протечки");
-    // smart_home::AirConditioner ac("ac1", "Кондиционер");
+    // SmartBulb bulb("bulb1", "Гостиная лампа");
+    // Thermometer thermo("thermo1", "Датчик температуры");
+    // SmartKettle kettle("kettle1", "Чайник Xiaomi");
+    // LeakSensor leakSensor("leak1", "Датчик протечки");
+    // AirConditioner ac("ac1", "Кондиционер");
 
 
     // // Управление устройствами

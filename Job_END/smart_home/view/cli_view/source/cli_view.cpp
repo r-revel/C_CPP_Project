@@ -32,16 +32,19 @@ void CliView::show_menu() {
     std::cout << "1. Список всех колонок\n";
     std::cout << "2. Устройства в комнате\n";
     std::cout << "3. Управление устройством\n";
-    std::cout << "4. Статус системы\n";
-    std::cout << "5. Выход\n\n";
+    std::cout << "4. Добавить устройство\n";
+    std::cout << "5. Статус системы\n";
+    std::cout << "6. Включения и отключения устройства\n";
+    std::cout << "7. Проверить устройства в колонке\n";
+    std::cout << "8. Выход\n\n";
 }
 
 int CliView::get_menu_choice() {
-    std::cout << "Enter choice (1-5): ";
+    std::cout << "Введите (1-8): ";
     int choice;
     std::cin >> choice;
     std::cin.ignore();
-    return (choice >= 1 && choice <= 5) ? choice : -1;
+    return (choice >= 1 && choice <= 8) ? choice : -1;
 }
 
 std::string CliView::get_input(const std::string& prompt) {
@@ -51,25 +54,11 @@ std::string CliView::get_input(const std::string& prompt) {
     return input;
 }
 
-void CliView::clear_input() {
-    // Not needed in simple terminal version
-}
 
-void CliView::show_speakers_list(const std::vector<std::pair<std::string, std::string>>& speakers) {
+void CliView::show_speakers_list(const SmartHome& speakers) {
     clear_main();
     
-    if (speakers.empty()) {
-        show_message("No speakers found");
-        return;
-    }
-    
-    std::cout << "\n\tСПИСОК КОЛОНОК\n\n";
-    std::cout << std::left << std::setw(30) << "Комната" << "Тип\n";
-    std::cout << std::string(50, '-') << "\n";
-    
-    for (const auto& [room, type] : speakers) {
-        std::cout << std::left << std::setw(30) << room << type << "\n";
-    }
+    std::cout << speakers;
     std::cout << "\n";
 }
 
@@ -77,27 +66,38 @@ void CliView::show_devices_list(const std::vector<std::tuple<std::string, std::s
     clear_main();
     
     if (devices.empty()) {
-        show_message("No devices found");
+        show_message("Устройства не найдены");
         return;
     }
-    
-    std::cout << "\n\tСПИСОК УСТРОЙСТВ\n\n";
-    std::cout << std::left << std::setw(15) << "ID" 
-              << std::setw(20) << "Имя" 
-              << std::setw(15) << "Статус" 
-              << "Type\n";
-    std::cout << std::string(60, '-') << "\n";
-    
+
+    // Заголовок
+    std::cout << "\n\t=== СПИСОК УСТРОЙСТВ ===\n\n";
+    std::cout << "ID\tИмя устройства\t\tСтатус\t\tТип устройства\n";
+    std::cout << std::string(70, '-') << "\n";
+
+    // Рассчитываем необходимое количество табов для выравнивания
+    auto calculate_tabs = [](const std::string& str, int reference_len) {
+        int tabs_needed = (reference_len - str.length()) / 8 + 1;
+        return std::max(1, tabs_needed);
+    };
+
+    // Выводим данные
     for (const auto& [id, name, status, type] : devices) {
-        std::cout << std::left << std::setw(15) << id 
-                  << std::setw(20) << name;
-        
-        if (status == "Online") {
-            std::cout << "\033[1;36m" << std::setw(15) << status << "\033[0m";
+        std::cout << id;
+        std::cout << std::string(calculate_tabs(id, 8), '\t');
+
+        std::cout << name;
+        std::cout << std::string(calculate_tabs(name, 18), '\t');
+
+        // Статус с цветом
+        if (status == "Онлайн") {
+            std::cout << "\033[1;32m" << status << "\t" << "\033[0m";
         } else {
-            std::cout << "\033[1;31m" << std::setw(15) << status << "\033[0m";
+            std::cout << "\033[1;31m" << status << "\t" << "\033[0m";
         }
-        
+        std::cout << std::string(calculate_tabs(status, 7), '\t');
+
+        // Тип устройства
         std::cout << type << "\n";
     }
     std::cout << "\n";
@@ -106,7 +106,7 @@ void CliView::show_devices_list(const std::vector<std::tuple<std::string, std::s
 void CliView::show_message(const std::string& message) {
     clear_main();
     std::cout << "\n\n\t" << message << "\n\n";
-    std::cout << "\tPress Enter to continue";
+    std::cout << "\tНажмите Enter для продолжения";
     std::cin.ignore();
 }
 
